@@ -1,112 +1,55 @@
-import BrandMark from "./BrandMark.jsx";
-import { DASHBOARD_URL, SIGNUP_URL } from "../config.js";
+import { SIGNUP_URL } from "../config.js";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-warm-border bg-off-white">
-      <div className="container-page py-12 md:py-16">
-        {/* CTA strip */}
-        <div className="rounded-xl3 bg-white border border-warm-border p-8 md:p-10 shadow-card flex flex-col md:flex-row md:items-center gap-6 md:gap-10 justify-between mb-12">
-          <div className="max-w-xl">
-            <div className="font-display text-2xl md:text-3xl font-semibold text-ink leading-tight">
-              Give your chickens a calmer coop keeper.
-            </div>
-            <p className="mt-2 text-warm-gray">
-              Free while we're in early access. Bring your flock over in a
-              minute flat.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <a href={SIGNUP_URL} className="btn btn-primary">
-              Start free
-            </a>
-            <a href={DASHBOARD_URL} className="btn btn-ghost">
-              Log in
-            </a>
-          </div>
+    <>
+      {/* Closing CTA */}
+      <section className="max-w-4xl mx-auto px-5 sm:px-6 py-16 md:py-20 text-center">
+        <p className="hand text-xl text-moss mb-2 leaf-accent">okay last thing</p>
+        <h2 className="display text-[32px] sm:text-4xl md:text-5xl font-semibold text-ink leading-tight mb-5">
+          Try it, see if it's for you.
+        </h2>
+        <p className="text-[17px] text-ink-soft max-w-xl mx-auto mb-8">
+          Takes under a minute to set up. If you hate it, delete your account
+          and no one will bother you again.
+        </p>
+        <a
+          href={SIGNUP_URL}
+          className="btn-rust inline-block px-8 py-4 rounded-md text-[16px] font-semibold"
+        >
+          Start logging eggs
+        </a>
+      </section>
+
+      <footer className="max-w-5xl mx-auto px-6 py-10 border-t border-ink/10 text-sm text-ink-muted flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2.5">
+          <svg width="22" height="22" viewBox="0 0 48 48">
+            <g
+              fill="none"
+              stroke="#7B715E"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z" />
+              <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21" />
+              <path
+                d="M41 18 L43 18.5 L41 19.5 Z"
+                fill="#B4541E"
+                stroke="#B4541E"
+              />
+            </g>
+          </svg>
+          <span>CoopKeeper · made by one person, for small flocks</span>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
-          <div className="col-span-2">
-            <a href="#top" className="inline-flex items-center gap-2 no-underline">
-              <BrandMark size={32} />
-              <span className="font-display font-bold text-lg text-ink">CoopKeeper</span>
-            </a>
-            <p className="mt-3 text-sm text-warm-gray max-w-xs leading-relaxed">
-              A calm little dashboard for backyard chicken keepers. Made by a
-              small team that really likes chickens.
-            </p>
-          </div>
-
-          <FooterCol title="Product">
-            <FooterLink href="#features">Features</FooterLink>
-            <FooterLink href="#how">How it works</FooterLink>
-            <FooterLink href="#faq">FAQ</FooterLink>
-            <FooterLink href={DASHBOARD_URL}>Log in</FooterLink>
-          </FooterCol>
-
-          <FooterCol title="Company">
-            <FooterLink href="mailto:hello@coopkeeper.net">Contact</FooterLink>
-            <FooterLink href="#">Privacy</FooterLink>
-            <FooterLink href="#">Terms</FooterLink>
-          </FooterCol>
+        <div className="flex items-center gap-5">
+          <a href="mailto:hello@coopkeeper.net" className="hover:text-ink">
+            hello@coopkeeper.net
+          </a>
+          <a href="#" className="hover:text-ink">Privacy</a>
+          <a href="#" className="hover:text-ink">Terms</a>
         </div>
-
-        <div className="mt-12 pt-6 border-t border-warm-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-warm-gray-light">
-          <div>
-            © {new Date().getFullYear()} CoopKeeper. Made with ☕ for happy flocks.
-          </div>
-          <div className="flex items-center gap-3">
-            <a href="#" aria-label="Twitter / X" className="hover:text-ink transition-colors">
-              <TwitterIcon />
-            </a>
-            <a href="#" aria-label="Instagram" className="hover:text-ink transition-colors">
-              <InstagramIcon />
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-function FooterCol({ title, children }) {
-  return (
-    <div>
-      <div className="text-xs font-bold uppercase tracking-wider text-warm-gray-light">
-        {title}
-      </div>
-      <ul className="mt-3 space-y-2">{children}</ul>
-    </div>
-  );
-}
-
-function FooterLink({ href, children }) {
-  return (
-    <li>
-      <a
-        href={href}
-        className="text-sm text-warm-gray hover:text-ink transition-colors"
-      >
-        {children}
-      </a>
-    </li>
-  );
-}
-
-function TwitterIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M18 3h3l-7.5 8.6L22 21h-7l-5-6.2L4 21H1l8-9.2L1.5 3H9l4.5 5.8L18 3z" fill="currentColor" />
-    </svg>
-  );
-}
-function InstagramIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
-    </svg>
+      </footer>
+    </>
   );
 }

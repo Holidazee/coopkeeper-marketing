@@ -1,131 +1,63 @@
-import { useEffect, useState } from "react";
-import BrandMark from "./BrandMark.jsx";
 import { DASHBOARD_URL, SIGNUP_URL } from "../config.js";
 
-const LINKS = [
-  { href: "#features", label: "Features" },
-  { href: "#how", label: "How it works" },
-  { href: "#faq", label: "FAQ" },
-];
+function InkHen({ size = 36 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" className="shrink-0">
+      <g
+        fill="none"
+        stroke="#1F1B15"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z" />
+        <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21" />
+        <path
+          d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13"
+          stroke="#B4541E"
+          strokeWidth="1.6"
+        />
+        <circle cx="38" cy="17" r="0.8" fill="#1F1B15" stroke="none" />
+        <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E" />
+        <path d="M18 24 Q24 26 28 30" />
+        <path d="M10 30 Q5 26 8 22" strokeWidth="1.6" />
+        <path d="M19 37 L18 41 M18 41 L16 41 M18 41 L20 41 M18 41 L18 43" />
+        <path d="M27 37 L28 41 M28 41 L26 41 M28 41 L30 41 M28 41 L28 43" />
+      </g>
+    </svg>
+  );
+}
 
 export default function Nav() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <header
-      className={`sticky top-0 z-50 transition-colors ${
-        scrolled
-          ? "bg-cream/85 backdrop-blur border-b border-warm-border"
-          : "bg-cream/70 backdrop-blur-sm border-b border-transparent"
-      }`}
-    >
-      <div className="container-page flex items-center justify-between py-3.5">
+    <header className="sticky top-0 z-30 backdrop-blur bg-paper/85 border-b border-ink/10">
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
         <a href="#top" className="flex items-center gap-2.5 no-underline">
-          <BrandMark size={36} />
-          <span className="font-display font-bold text-lg tracking-tight text-ink">
+          <InkHen />
+          <span className="display text-[22px] font-bold text-ink tracking-tight">
             CoopKeeper
           </span>
         </a>
-
-        <nav aria-label="Primary" className="hidden md:flex items-center gap-1">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="px-3 py-2 text-sm font-medium text-warm-gray hover:text-ink rounded-lg hover:bg-off-white transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
+        <nav className="hidden md:flex items-center gap-7 text-[15px] text-ink-soft">
+          <a href="#what" className="hover:text-ink">What it does</a>
+          <a href="#why" className="hover:text-ink">Why I built it</a>
+          <a href="#faq" className="hover:text-ink">FAQ</a>
         </nav>
-
         <div className="flex items-center gap-2">
           <a
             href={DASHBOARD_URL}
-            className="btn btn-sm btn-ghost hidden sm:inline-flex"
-          >
-            Log in
-          </a>
-          {/* Mobile: keep Log in visible but slightly smaller */}
-          <a
-            href={DASHBOARD_URL}
-            className="text-sm font-semibold text-warm-gray hover:text-ink px-3 py-2 rounded-lg hover:bg-off-white sm:hidden transition-colors"
+            className="btn-ghost px-3 sm:px-4 py-2 rounded-md text-sm font-medium"
           >
             Log in
           </a>
           <a
             href={SIGNUP_URL}
-            className="btn btn-sm btn-primary hidden sm:inline-flex"
+            className="btn-rust px-3 sm:px-4 py-2 rounded-md text-sm font-semibold"
           >
-            Start free
-          </a>
-          <button
-            type="button"
-            aria-label="Open menu"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg hover:bg-off-white transition-colors"
-          >
-            <Hamburger open={open} />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-200 ease-out ${
-          open ? "max-h-72 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="container-page pb-4 flex flex-col gap-1">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="px-3 py-3 text-base font-medium text-ink rounded-lg hover:bg-off-white"
-            >
-              {l.label}
-            </a>
-          ))}
-          <a
-            href={SIGNUP_URL}
-            className="btn btn-primary mt-2 w-full"
-          >
-            Start free
+            Try it
           </a>
         </div>
       </div>
     </header>
-  );
-}
-
-function Hamburger({ open }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
-      <line
-        x1="3" y1={open ? 11 : 6} x2="19" y2={open ? 11 : 6}
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        style={{ transform: open ? "rotate(45deg)" : "none", transformOrigin: "center", transition: "all 150ms" }}
-      />
-      <line
-        x1="3" y1="11" x2="19" y2="11"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        style={{ opacity: open ? 0 : 1, transition: "opacity 150ms" }}
-      />
-      <line
-        x1="3" y1={open ? 11 : 16} x2="19" y2={open ? 11 : 16}
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        style={{ transform: open ? "rotate(-45deg)" : "none", transformOrigin: "center", transition: "all 150ms" }}
-      />
-    </svg>
   );
 }

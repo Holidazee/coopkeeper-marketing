@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CoopKeeper — v2 rendering (not live yet)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#F3EBDB",
+          "paper-dark": "#E8DCC2",
+          ink: "#1F1B15",
+          "ink-soft": "#433C30",
+          "ink-muted": "#7B715E",
+          rust: { DEFAULT: "#B4541E", dark: "#8C3E12", soft: "#E8B892" },
+          moss: { DEFAULT: "#556B3C", dark: "#3E5128", soft: "#C7D1B1" },
+          yolk: "#E6B547",
+          dusk: { DEFAULT: "#5C7A8F", dark: "#3F5A6D" },
+        },
+        fontFamily: {
+          sans: ["Inter", "system-ui", "sans-serif"],
+          display: ["Fraunces", "Georgia", "serif"],
+          hand: ["Caveat", "cursive"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  /* Paper grain texture on the body */
+  html, body { overflow-x: hidden; }
+  body {
+    background-color: #F3EBDB;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(180, 84, 30, 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 85% 72%, rgba(85, 107, 60, 0.07) 0%, transparent 50%),
+      radial-gradient(circle at 40% 90%, rgba(85, 107, 60, 0.04) 0%, transparent 40%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.04  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .hand { font-family: "Caveat", cursive; }
+  .display { font-family: "Fraunces", Georgia, serif; }
+  .sketch-underline {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12'><path d='M2,8 Q40,2 80,7 T160,7 T198,5' stroke='%23B4541E' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 0.5em;
+    padding-bottom: 0.1em;
+  }
+  .sketch-circle {
+    position: relative;
+    display: inline-block;
+  }
+  .sketch-circle::before {
+    content: "";
+    position: absolute;
+    inset: -8px -14px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'><path d='M60,5 C95,6 115,20 114,30 C113,45 85,55 60,54 C30,53 8,42 7,30 C6,18 28,5 60,5' stroke='%23B4541E' stroke-width='2' fill='none' stroke-linecap='round' stroke-dasharray='1 0'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+  .tape {
+    position: absolute;
+    width: 90px;
+    height: 22px;
+    background: rgba(230, 181, 71, 0.5);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transform: rotate(-4deg);
+  }
+  .tape.right { transform: rotate(3deg); }
+  .rotate-subtle-l { transform: rotate(-0.8deg); }
+  .rotate-subtle-r { transform: rotate(0.6deg); }
+  .divider-sketch {
+    height: 14px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14'><path d='M2,7 Q100,2 200,8 T398,6' stroke='%237B715E' stroke-width='1.5' fill='none' stroke-linecap='round' opacity='0.5'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+  /* Small scratch marks on buttons */
+  .btn-rust {
+    background: #B4541E;
+    color: #F3EBDB;
+    position: relative;
+  }
+  .btn-rust:hover { background: #8C3E12; }
+  .btn-moss {
+    background: #556B3C;
+    color: #F3EBDB;
+    position: relative;
+  }
+  .btn-moss:hover { background: #3E5128; }
+  .btn-ghost {
+    border: 1.5px solid #433C30;
+    color: #1F1B15;
+    background: transparent;
+  }
+  .btn-ghost:hover { background: rgba(31,27,21,0.06); }
+  /* moss variant of the sketch underline */
+  .sketch-underline-moss {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12'><path d='M2,8 Q40,2 80,7 T160,7 T198,5' stroke='%23556B3C' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 0.5em;
+    padding-bottom: 0.1em;
+  }
+  /* small leaf accent */
+  .leaf-accent::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    vertical-align: -2px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M3 17 Q5 8 17 4 Q15 15 3 17 Z M3 17 L10 10' stroke='%23556B3C' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+</style>
+</head>
+<body class="font-sans text-ink antialiased">
+
+<!-- Preview banner -->
+<div class="w-full bg-ink text-paper text-center text-sm py-2 px-4">
+  <span class="hand text-lg text-yolk">preview v2 —</span>
+  this is a rendering, not live. Compare with <a class="underline" href="preview.html">preview.html</a> to see the old version.
+</div>
+
+<!-- ========= NAV ========= -->
+<header class="sticky top-0 z-30 backdrop-blur bg-paper/85 border-b border-ink/10">
+  <div class="max-w-5xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
+    <a href="#top" class="flex items-center gap-2.5 no-underline">
+      <!-- Logo: line-drawn hen -->
+      <svg width="36" height="36" viewBox="0 0 48 48" class="shrink-0">
+        <g fill="none" stroke="#1F1B15" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <!-- body -->
+          <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z" />
+          <!-- head -->
+          <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21" />
+          <!-- comb -->
+          <path d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13" stroke="#B4541E" stroke-width="1.6"/>
+          <!-- eye -->
+          <circle cx="38" cy="17" r="0.8" fill="#1F1B15" stroke="none"/>
+          <!-- beak -->
+          <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E"/>
+          <!-- wing -->
+          <path d="M18 24 Q24 26 28 30" />
+          <!-- tail feather -->
+          <path d="M10 30 Q5 26 8 22" stroke-width="1.6"/>
+          <!-- feet -->
+          <path d="M19 37 L18 41 M18 41 L16 41 M18 41 L20 41 M18 41 L18 43" />
+          <path d="M27 37 L28 41 M28 41 L26 41 M28 41 L30 41 M28 41 L28 43" />
+        </g>
+      </svg>
+      <span class="display text-[22px] font-bold text-ink tracking-tight">CoopKeeper</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-[15px] text-ink-soft">
+      <a href="#what" class="hover:text-ink">What it does</a>
+      <a href="#why" class="hover:text-ink">Why I built it</a>
+      <a href="#faq" class="hover:text-ink">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://app.coopkeeper.net/" class="btn-ghost px-3 sm:px-4 py-2 rounded-md text-sm font-medium">Log in</a>
+      <a href="https://app.coopkeeper.net/" class="btn-rust px-3 sm:px-4 py-2 rounded-md text-sm font-semibold">Try it</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========= HERO ========= -->
+<section id="top" class="max-w-5xl mx-auto px-5 sm:px-6 pt-12 md:pt-24 pb-14 md:pb-16 relative overflow-hidden">
+  <div class="grid md:grid-cols-12 gap-8 md:gap-10 items-start">
+    <div class="md:col-span-7 relative">
+      <p class="hand text-xl text-rust mb-3">howdy —</p>
+      <h1 class="display text-[40px] sm:text-5xl md:text-[68px] leading-[1.05] md:leading-[1.02] font-semibold text-ink tracking-tight">
+        I kept losing track of<br/>
+        <span class="sketch-underline">the little stuff.</span><br/>
+        So I made this.
+      </h1>
+      <p class="mt-6 md:mt-7 text-[17px] md:text-[19px] text-ink-soft leading-relaxed max-w-xl">
+        CoopKeeper is a small web thing for logging eggs, tracking what
+        your flock costs you, and remembering when you last cleaned the
+        coop. It is not venture-backed. It is not going to boil the ocean.
+        It is just useful.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="https://app.coopkeeper.net/" class="btn-rust px-6 py-3 rounded-md text-[15px] font-semibold">
+          Give it a try — it's free
+        </a>
+        <a href="#what" class="text-ink-soft hover:text-ink text-[15px] px-2 py-3 inline-flex items-center gap-1">
+          or see what it actually does &rarr;
+        </a>
+      </div>
+      <p class="hand text-[17px] text-ink-muted mt-5">no credit card, no "book a demo" nonsense</p>
+    </div>
+
+    <!-- Hand-sketched app preview + polaroid photo -->
+    <div class="md:col-span-5 relative">
+      <!-- Polaroid photo, tucked behind/beside the sketch -->
+      <div class="hidden md:block absolute -top-6 -left-10 z-0 rotate-[-7deg] pointer-events-none">
+        <div class="bg-paper-dark border border-ink/15 p-2 pb-6 shadow-[3px_4px_0_rgba(31,27,21,0.12)] w-40">
+          <img src="https://loremflickr.com/320/240/chicken,backyard,hen" alt="my hens" class="w-full h-28 object-cover" />
+          <p class="hand text-center text-sm text-ink-soft mt-1">the girls, march '24</p>
+        </div>
+      </div>
+      <div class="relative rotate-subtle-r z-10">
+        <div class="tape left-1/2 -translate-x-1/2 -top-3"></div>
+        <div class="bg-paper-dark border border-ink/15 rounded-sm p-5 shadow-[2px_3px_0_rgba(31,27,21,0.08)]">
+          <!-- Fake sketched screenshot: simple egg counter + dated log -->
+          <svg viewBox="0 0 260 400" class="w-full">
+            <!-- Today's counter (the whole point) -->
+            <g>
+              <rect x="10" y="14" width="240" height="130" rx="6" fill="#F3EBDB" stroke="#1F1B15" stroke-width="1.4"/>
+              <text x="24" y="34" font-family="Caveat" font-size="14" fill="#7B715E">today · Sun Apr 19</text>
+              <text x="24" y="52" font-family="Inter" font-size="10" fill="#1F1B15" font-weight="600">eggs collected</text>
+
+              <!-- minus button -->
+              <circle cx="44" cy="96" r="22" fill="#FFF" stroke="#1F1B15" stroke-width="1.6"/>
+              <path d="M32 96 L56 96" stroke="#1F1B15" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- big number -->
+              <text x="130" y="108" font-family="Fraunces" font-size="56" font-weight="700" fill="#1F1B15" text-anchor="middle">7</text>
+
+              <!-- plus button -->
+              <circle cx="216" cy="96" r="22" fill="#B4541E"/>
+              <path d="M204 96 L228 96 M216 84 L216 108" stroke="#F3EBDB" stroke-width="2.5" stroke-linecap="round"/>
+
+              <text x="130" y="134" font-family="Caveat" font-size="14" fill="#7B715E" text-anchor="middle">tap &plus; every time you collect one</text>
+            </g>
+
+            <!-- Recent log -->
+            <g>
+              <rect x="10" y="156" width="240" height="138" rx="6" fill="#F3EBDB" stroke="#1F1B15" stroke-width="1.4"/>
+              <text x="24" y="176" font-family="Caveat" font-size="14" fill="#7B715E">this week</text>
+
+              <!-- entry rows -->
+              <g font-family="Inter" font-size="10" fill="#1F1B15">
+                <line x1="24" y1="192" x2="236" y2="192" stroke="#1F1B15" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.3"/>
+                <text x="24" y="206">Sat Apr 18</text>
+                <text x="236" y="206" text-anchor="end" font-weight="600">8</text>
+
+                <line x1="24" y1="214" x2="236" y2="214" stroke="#1F1B15" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.3"/>
+                <text x="24" y="228">Fri Apr 17</text>
+                <text x="236" y="228" text-anchor="end" font-weight="600">6</text>
+
+                <line x1="24" y1="236" x2="236" y2="236" stroke="#1F1B15" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.3"/>
+                <text x="24" y="250">Thu Apr 16</text>
+                <text x="236" y="250" text-anchor="end" font-weight="600">7</text>
+
+                <line x1="24" y1="258" x2="236" y2="258" stroke="#1F1B15" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.3"/>
+                <text x="24" y="272">Wed Apr 15</text>
+                <text x="236" y="272" text-anchor="end" font-weight="600">5</text>
+
+                <line x1="24" y1="280" x2="236" y2="280" stroke="#1F1B15" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.3"/>
+              </g>
+              <text x="24" y="290" font-family="Caveat" font-size="12" fill="#556B3C" font-weight="600">= 33 eggs · avg 6.6/day</text>
+            </g>
+
+            <!-- Status card at bottom -->
+            <g>
+              <rect x="10" y="306" width="240" height="78" rx="6" fill="#F3EBDB" stroke="#1F1B15" stroke-width="1.4"/>
+              <text x="24" y="325" font-family="Caveat" font-size="13" fill="#7B715E">quick status</text>
+              <circle cx="20" cy="345" r="2.5" fill="#556B3C"/>
+              <text x="28" y="348" font-family="Inter" font-size="10" fill="#1F1B15">bedding: <tspan fill="#556B3C" font-weight="600">fresh</tspan> (3d ago)</text>
+              <text x="28" y="365" font-family="Inter" font-size="10" fill="#1F1B15">feed: half bag left</text>
+              <text x="28" y="380" font-family="Inter" font-size="10" fill="#556B3C" font-weight="600">$2.40 per dozen this month</text>
+            </g>
+          </svg>
+        </div>
+        <p class="hand text-rust text-lg mt-3 ml-2">← roughly what the dashboard looks like</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-5 sm:px-6">
+  <div class="divider-sketch"></div>
+</div>
+
+<!-- ========= WHY I BUILT IT ========= -->
+<section id="why" class="max-w-4xl mx-auto px-5 sm:px-6 py-16 md:py-28">
+  <div class="grid md:grid-cols-12 gap-10 md:gap-12 items-start">
+    <div class="md:col-span-7">
+      <p class="hand text-xl text-moss mb-3 leaf-accent">the honest bit</p>
+      <h2 class="display text-[28px] sm:text-3xl md:text-4xl font-semibold text-ink leading-snug mb-6">
+        Spreadsheets are a graveyard. Notebooks get rained on.
+      </h2>
+      <div class="space-y-5 text-[17px] md:text-[18px] leading-relaxed text-ink-soft">
+    <p>
+      I got six hens in the spring of 2024. Within a month I had three
+      half-filled notebooks, a kitchen whiteboard nobody updated, and a
+      Google Sheet I'd open twice then forget about for two weeks. By
+      October I genuinely could not remember which hen was molting, when
+      I last bought feed, or whether I was losing money on eggs.
+    </p>
+    <p>
+      I looked for an app. What I found was either spreadsheet-shaped
+      farm software built for a 500-bird operation, or $9.99 / month
+      "pet chicken trackers" with cartoon chickens winking at me.
+    </p>
+    <p>
+      So this is the one I wanted. It opens fast, it remembers which coop
+      is yours, you can log today's eggs in one tap, and at the end of the
+      year you can actually tell whether your hens paid for themselves. No
+      login walls to features, no upsells, no boiling the ocean.
+    </p>
+        <p class="text-ink">
+          — Tay, who is still bad at remembering cleaning days
+        </p>
+      </div>
+    </div>
+
+    <!-- Polaroid cluster on the right -->
+    <div class="md:col-span-5 relative md:pt-6 max-w-sm mx-auto md:max-w-none">
+      <div class="relative rotate-[2deg]">
+        <div class="tape right left-1/2 -translate-x-1/2 -top-3"></div>
+        <div class="bg-paper-dark border border-ink/15 p-3 pb-10 shadow-[3px_5px_0_rgba(31,27,21,0.1)]">
+          <img src="https://loremflickr.com/480/360/backyard,chicken,coop" alt="our coop" class="w-full aspect-[4/3] object-cover" />
+          <p class="hand text-center text-base text-ink-soft mt-3">the coop I built. Mostly square.</p>
+        </div>
+      </div>
+      <div class="relative rotate-[-4deg] -mt-4 md:-mt-6 ml-6 sm:ml-12 mr-2 sm:mr-0">
+        <div class="bg-paper-dark border border-ink/15 p-3 pb-10 shadow-[3px_5px_0_rgba(31,27,21,0.1)]">
+          <img src="https://loremflickr.com/400/400/hen,face,closeup" alt="Henrietta" class="w-full aspect-square object-cover" />
+          <p class="hand text-center text-base text-ink-soft mt-3">Henrietta. In charge.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-5 sm:px-6">
+  <div class="divider-sketch"></div>
+</div>
+
+<!-- ========= WHAT IT DOES ========= -->
+<section id="what" class="max-w-5xl mx-auto px-5 sm:px-6 py-16 md:py-28">
+  <div class="mb-10 md:mb-14">
+    <p class="hand text-xl text-rust mb-2">what it does, actually</p>
+    <h2 class="display text-[32px] sm:text-4xl md:text-5xl font-semibold text-ink leading-[1.1] max-w-3xl">
+      Four small things. Done well.
+    </h2>
+  </div>
+
+  <div class="grid md:grid-cols-12 gap-x-10 gap-y-10 md:gap-y-14">
+
+    <!-- Feature 1 -->
+    <div class="md:col-span-6 md:col-start-1 relative rotate-subtle-l">
+      <div class="flex items-start gap-4">
+        <span class="display text-rust text-5xl font-bold leading-none shrink-0">1.</span>
+        <div>
+          <h3 class="display text-2xl font-semibold text-ink mb-2">Log eggs in one tap</h3>
+          <p class="text-[17px] text-ink-soft leading-relaxed">
+            A big fat + button. That's the whole feature. Tap it each
+            time you collect one, or punch in the total when you come
+            inside. Every tap is date-stamped so your weekly and yearly
+            totals just… exist. Works on a phone with flour on your
+            fingers.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="md:col-span-6 md:col-start-7 relative md:mt-16 rotate-subtle-r">
+      <div class="flex items-start gap-4">
+        <span class="display text-moss text-5xl font-bold leading-none shrink-0">2.</span>
+        <div>
+          <h3 class="display text-2xl font-semibold text-ink mb-2">Know what it actually costs</h3>
+          <p class="text-[17px] text-ink-soft leading-relaxed">
+            Add a bag of feed, a roll of hardware cloth, a vet visit.
+            CoopKeeper divides it by how many eggs you've collected and
+            tells you, without euphemism, what a dozen cost you this
+            month. (Usually more than the store. It's fine. It's for the
+            vibes.)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="md:col-span-6 md:col-start-1 relative rotate-subtle-r">
+      <div class="flex items-start gap-4">
+        <span class="display text-yolk text-5xl font-bold leading-none shrink-0">3.</span>
+        <div>
+          <h3 class="display text-2xl font-semibold text-ink mb-2">Remember the boring stuff</h3>
+          <p class="text-[17px] text-ink-soft leading-relaxed">
+            Last time you swapped bedding. Last time you dusted for mites.
+            When the waterer was deep-cleaned. CoopKeeper keeps the list,
+            nudges you when it's been too long, and doesn't judge you when
+            it has.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 4 -->
+    <div class="md:col-span-6 md:col-start-7 relative md:mt-16 rotate-subtle-l">
+      <div class="flex items-start gap-4">
+        <span class="display text-dusk text-5xl font-bold leading-none shrink-0">4.</span>
+        <div>
+          <h3 class="display text-2xl font-semibold text-ink mb-2">Keep track of the birds themselves</h3>
+          <p class="text-[17px] text-ink-soft leading-relaxed">
+            Breed, hatch date, name (if you're that kind of keeper),
+            whether she's laying, moulting, broody, or recovering. Useful
+            later when you're trying to remember why Henrietta stopped
+            laying in September.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-5 sm:px-6">
+  <div class="divider-sketch"></div>
+</div>
+
+<!-- ========= HOW IT FEELS TO USE ========= -->
+<section class="max-w-4xl mx-auto px-5 sm:px-6 py-16 md:py-24">
+  <div class="grid md:grid-cols-5 gap-10 items-center">
+    <div class="md:col-span-3">
+      <p class="hand text-xl text-moss mb-2 leaf-accent">the idea</p>
+      <h2 class="display text-3xl md:text-4xl font-semibold text-ink leading-snug mb-5">
+        Open it, log a thing, close it. Under 10 seconds.
+      </h2>
+      <p class="text-[17px] text-ink-soft leading-relaxed">
+        I measured this. Loading CoopKeeper on a phone, tapping today's
+        eggs once, and closing the tab takes me between 6 and 9 seconds
+        depending on how slow my cell signal is by the coop. If that ever
+        stops being true, I've done something wrong.
+      </p>
+    </div>
+    <div class="md:col-span-2 relative">
+      <!-- Hand-drawn phone -->
+      <svg viewBox="0 0 180 320" class="w-full max-w-[200px] mx-auto">
+        <g fill="none" stroke="#1F1B15" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="10" width="140" height="300" rx="20" fill="#F3EBDB"/>
+          <!-- date strip -->
+          <text x="90" y="40" font-family="Caveat" font-size="13" fill="#7B715E" stroke="none" text-anchor="middle">Sun · Apr 19</text>
+          <!-- big today count -->
+          <text x="90" y="88" font-family="Fraunces" font-size="38" font-weight="700" fill="#1F1B15" stroke="none" text-anchor="middle">7</text>
+          <text x="90" y="104" font-family="Inter" font-size="9" fill="#7B715E" stroke="none" text-anchor="middle">eggs today</text>
+          <!-- minus / plus buttons -->
+          <circle cx="55" cy="140" r="18" fill="#F3EBDB"/>
+          <path d="M46 140 L64 140" stroke-width="2.5"/>
+          <circle cx="125" cy="140" r="18" fill="#B4541E" stroke="#8C3E12"/>
+          <path d="M116 140 L134 140 M125 131 L125 149" stroke="#F3EBDB" stroke-width="2.5"/>
+          <!-- this week log -->
+          <text x="35" y="188" font-family="Caveat" font-size="13" fill="#7B715E" stroke="none">this week</text>
+          <line x1="35" y1="196" x2="145" y2="196" stroke-dasharray="2 3"/>
+          <text x="35" y="214" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none">Sat Apr 18</text>
+          <text x="145" y="214" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none" font-weight="600" text-anchor="end">8</text>
+          <text x="35" y="232" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none">Fri Apr 17</text>
+          <text x="145" y="232" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none" font-weight="600" text-anchor="end">6</text>
+          <text x="35" y="250" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none">Thu Apr 16</text>
+          <text x="145" y="250" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none" font-weight="600" text-anchor="end">7</text>
+          <text x="35" y="268" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none">Wed Apr 15</text>
+          <text x="145" y="268" font-family="Inter" font-size="10" fill="#1F1B15" stroke="none" font-weight="600" text-anchor="end">5</text>
+          <text x="90" y="288" font-family="Caveat" font-size="11" fill="#556B3C" stroke="none" text-anchor="middle" font-weight="600">33 this week</text>
+          <!-- home button -->
+          <circle cx="90" cy="301" r="4"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-5 sm:px-6">
+  <div class="divider-sketch"></div>
+</div>
+
+<!-- ========= FAQ ========= -->
+<section id="faq" class="max-w-3xl mx-auto px-5 sm:px-6 py-20 md:py-24">
+  <p class="hand text-xl text-rust mb-2">before you ask</p>
+  <h2 class="display text-[32px] sm:text-4xl md:text-5xl font-semibold text-ink leading-[1.1] mb-8 md:mb-10">
+    Questions real people have asked me.
+  </h2>
+
+  <div class="space-y-6">
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Is it actually free?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Yes, right now it is free. I am one person paying ~$7/month
+        to host it. If it gets popular enough that I can't eat that
+        cost anymore, I'll introduce a small paid tier and the basics
+        will stay free forever. Nobody is ever going to lose access
+        to their own flock data over money.
+      </p>
+    </details>
+
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Do I need an app?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        No. It's a website. You open it in the browser on your phone,
+        tablet, laptop, whatever. If you add it to your home screen it
+        acts like an app. There is no App Store download because I
+        didn't want to beg two corporations for permission to let you
+        count eggs.
+      </p>
+    </details>
+
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Will you sell my data? Does my feed supplier get emails about me?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        No. There are no third-party trackers, no ad pixels, no email
+        list rented to Tractor Supply. If I ever change that, I'll tell
+        you before I do it, and you can delete your account.
+      </p>
+    </details>
+
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">What if I have 40 birds? Or 4?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Both work. CoopKeeper was built for backyard flocks (3–30-ish
+        birds), but people have used it for single pet hens and for
+        small homesteads with a few dozen. If you're running a commercial
+        layer operation with 500+ birds, you probably want real farm
+        software — and I'll happily point you somewhere.
+      </p>
+    </details>
+
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Do you take feature requests?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Yes, enthusiastically. Email me at
+        <a href="mailto:hello@coopkeeper.net" class="text-moss-dark underline underline-offset-2">hello@coopkeeper.net</a>.
+        I read every one. I won't build all of them, but the ones I hear
+        three times tend to happen.
+      </p>
+    </details>
+  </div>
+</section>
+
+<!-- ========= CTA + FOOTER ========= -->
+<section class="max-w-4xl mx-auto px-5 sm:px-6 py-16 md:py-20 text-center">
+  <p class="hand text-xl text-moss mb-2 leaf-accent">okay last thing</p>
+  <h2 class="display text-[32px] sm:text-4xl md:text-5xl font-semibold text-ink leading-tight mb-5">
+    Try it, see if it's for you.
+  </h2>
+  <p class="text-[17px] text-ink-soft max-w-xl mx-auto mb-8">
+    Takes under a minute to set up. If you hate it, delete your account
+    and no one will bother you again.
+  </p>
+  <a href="https://app.coopkeeper.net/" class="btn-rust inline-block px-8 py-4 rounded-md text-[16px] font-semibold">
+    Start logging eggs
+  </a>
+</section>
+
+<footer class="max-w-5xl mx-auto px-6 py-10 border-t border-ink/10 text-sm text-ink-muted flex flex-col md:flex-row items-center justify-between gap-4">
+  <div class="flex items-center gap-2.5">
+    <svg width="22" height="22" viewBox="0 0 48 48">
+      <g fill="none" stroke="#7B715E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z"/>
+        <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21"/>
+        <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E"/>
+      </g>
+    </svg>
+    <span>CoopKeeper · made by one person, for small flocks</span>
+  </div>
+  <div class="flex items-center gap-5">
+    <a href="mailto:hello@coopkeeper.net" class="hover:text-ink">hello@coopkeeper.net</a>
+    <a href="#" class="hover:text-ink">Privacy</a>
+    <a href="#" class="hover:text-ink">Terms</a>
+  </div>
+</footer>
+
+<!-- ========= LOGO EXPLORATION (hidden behind a details for me to see) ========= -->
+<section class="max-w-5xl mx-auto px-6 py-12 border-t border-ink/10">
+  <details>
+    <summary class="hand text-2xl text-ink-soft cursor-pointer">logo explorations (click to expand)</summary>
+    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+
+      <div class="bg-paper-dark p-6 rounded border border-ink/10 text-center">
+        <svg width="64" height="64" viewBox="0 0 48 48" class="mx-auto mb-3">
+          <g fill="none" stroke="#1F1B15" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z"/>
+            <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21"/>
+            <path d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13" stroke="#B4541E"/>
+            <circle cx="38" cy="17" r="0.8" fill="#1F1B15" stroke="none"/>
+            <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E"/>
+            <path d="M18 24 Q24 26 28 30"/>
+            <path d="M10 30 Q5 26 8 22" stroke-width="1.6"/>
+            <path d="M19 37 L18 41 M18 41 L16 41 M18 41 L20 41 M18 41 L18 43"/>
+            <path d="M27 37 L28 41 M28 41 L26 41 M28 41 L30 41 M28 41 L28 43"/>
+          </g>
+        </svg>
+        <p class="display text-ink font-semibold">Ink Hen</p>
+        <p class="text-xs text-ink-muted mt-1">The one used above</p>
+      </div>
+
+      <div class="bg-paper-dark p-6 rounded border border-ink/10 text-center">
+        <svg width="64" height="64" viewBox="0 0 48 48" class="mx-auto mb-3">
+          <!-- Simple egg with tiny comb -->
+          <path d="M24 8 Q22 7 23 9 Q21 9 22 10 Q20 10 21 11" fill="none" stroke="#B4541E" stroke-width="1.6" stroke-linecap="round"/>
+          <ellipse cx="24" cy="26" rx="13" ry="16" fill="#F3EBDB" stroke="#1F1B15" stroke-width="1.8"/>
+          <circle cx="20" cy="22" r="0.9" fill="#1F1B15"/>
+        </svg>
+        <p class="display text-ink font-semibold">Just an Egg</p>
+        <p class="text-xs text-ink-muted mt-1">Minimal. Ambiguous.</p>
+      </div>
+
+      <div class="bg-paper-dark p-6 rounded border border-ink/10 text-center">
+        <svg width="64" height="64" viewBox="0 0 48 48" class="mx-auto mb-3">
+          <!-- Silhouette hen -->
+          <path d="M10 34 Q8 22 18 18 Q24 16 30 18 Q36 20 38 26 Q40 32 36 36 Q30 39 22 38 Q14 37 10 34 Z M32 18 Q36 12 40 13 Q42 14 41 17 L36 20 Z" fill="#1F1B15"/>
+          <path d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13" stroke="#B4541E" stroke-width="1.8" fill="none"/>
+          <path d="M41 17 L43 17 L41.5 18.5 Z" fill="#B4541E"/>
+          <circle cx="38" cy="16" r="0.8" fill="#F3EBDB"/>
+        </svg>
+        <p class="display text-ink font-semibold">Solid Hen</p>
+        <p class="text-xs text-ink-muted mt-1">Reads better at tiny sizes</p>
+      </div>
+
+      <div class="bg-paper-dark p-6 rounded border border-ink/10 text-center">
+        <svg width="64" height="64" viewBox="0 0 48 48" class="mx-auto mb-3">
+          <!-- "CK" monogram in serif -->
+          <rect x="4" y="4" width="40" height="40" rx="4" fill="none" stroke="#1F1B15" stroke-width="1.8"/>
+          <text x="24" y="33" font-family="Fraunces" font-size="22" font-weight="700" fill="#1F1B15" text-anchor="middle">CK</text>
+          <circle cx="37" cy="11" r="2" fill="#B4541E"/>
+        </svg>
+        <p class="display text-ink font-semibold">CK Monogram</p>
+        <p class="text-xs text-ink-muted mt-1">No chicken. More grown-up.</p>
+      </div>
+
+    </div>
+    <p class="hand text-lg text-ink-muted mt-6">tell me which you like, or if none of them feel right i'll try another direction</p>
+  </details>
+</section>
+
+</body>
+</html>
