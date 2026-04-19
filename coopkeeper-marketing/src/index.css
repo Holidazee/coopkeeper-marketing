@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  }
+  ::selection {
+    background: #fde4d0;
+    color: #2a2420;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-150;
+  }
+  .btn-primary {
+    @apply bg-terracotta text-white px-5 py-3 shadow-card hover:bg-terracotta-dark hover:shadow-lift active:translate-y-px;
+  }
+  .btn-ghost {
+    @apply border border-warm-border-strong text-ink px-5 py-3 hover:bg-off-white active:translate-y-px;
+  }
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .container-page {
+    @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-terracotta-dark;
+  }
+
+  .headline {
+    @apply font-display font-semibold tracking-tight text-ink;
+  }
+
+  .section-title {
+    @apply headline text-3xl sm:text-4xl md:text-[2.75rem] leading-[1.08];
+  }
+
+  .card-soft {
+    @apply bg-white border border-warm-border rounded-xl2 shadow-soft;
+  }
+
+  .underline-squiggle {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14'><path d='M2 9 C 40 1, 80 13, 120 7 S 180 2, 198 9' stroke='%23E07A3A' stroke-width='3' stroke-linecap='round' fill='none' /></svg>");
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 0.42em;
+    padding-bottom: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  html { scroll-behavior: auto; }
+}
