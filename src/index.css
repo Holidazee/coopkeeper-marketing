@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  html, body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   html { scroll-behavior: smooth; }
   body {
     @apply text-ink font-sans antialiased;

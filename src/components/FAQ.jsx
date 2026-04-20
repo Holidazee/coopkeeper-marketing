@@ -3,22 +3,24 @@ const ITEMS = [
     q: "Is it actually free?",
     a: (
       <>
-        Yes, right now it is free. I am one person paying ~$7/month to host
-        it. If it gets popular enough that I can't eat that cost anymore,
-        I'll introduce a small paid tier and the basics will stay free
+        Yes. Right now the whole thing is free — I'm one person paying about
+        $7/month to host it. Somewhere down the road there may be paid
+        features for folks who want extras, but the basics — logging eggs,
+        tracking feed and costs, cleaning reminders — will stay free
         forever. Nobody is ever going to lose access to their own flock data
         over money.
       </>
     ),
   },
   {
-    q: "Do I need an app?",
+    q: "Is there an app?",
     a: (
       <>
-        No. It's a website. You open it in the browser on your phone, tablet,
-        laptop, whatever. If you add it to your home screen it acts like an
-        app. There is no App Store download because I didn't want to beg two
-        corporations for permission to let you count eggs.
+        Not yet. It's a website — you open it in the browser on your phone,
+        tablet, laptop, whatever. Add it to your home screen and it acts
+        like an app. Someday there may be a proper native app, but for now
+        this works just fine and means I don't have to beg two corporations
+        for permission to let you count eggs.
       </>
     ),
   },
@@ -55,8 +57,11 @@ const ITEMS = [
         >
           hello@coopkeeper.net
         </a>
-        . I read every one. I won't build all of them, but the ones I hear
-        three times tend to happen.
+        {" "}— I read every one. A lot of what ends up getting built (including
+        the "maybe someday" stuff up there — a native app, paid extras,
+        whatever) will get built because enough people wrote in and asked for
+        it. So if there's something you want, tell me. I won't build
+        everything, but the ones I hear three times tend to happen.
       </>
     ),
   },

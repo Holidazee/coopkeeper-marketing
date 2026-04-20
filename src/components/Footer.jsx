@@ -17,7 +17,7 @@ export default function Footer() {
           href={SIGNUP_URL}
           className="btn-rust inline-block px-8 py-4 rounded-md text-[16px] font-semibold"
         >
-          Start logging eggs
+          Get Started
         </a>
       </section>
 

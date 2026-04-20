@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CoopKeeper — hero preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#F3EBDB",
+          "paper-dark": "#E8DCC2",
+          ink: "#1F1B15",
+          "ink-soft": "#433C30",
+          "ink-muted": "#7B715E",
+          rust: { DEFAULT: "#B4541E", dark: "#8C3E12" },
+          moss: { DEFAULT: "#556B3C", dark: "#3E5128" },
+          yolk: "#E6B547",
+        },
+        fontFamily: {
+          sans: ["Inter", "system-ui", "sans-serif"],
+          display: ["Fraunces", "Georgia", "serif"],
+          hand: ["Caveat", "cursive"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html, body { overflow-x: clip; }
+  body {
+    background-color: #F3EBDB;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(180, 84, 30, 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 85% 72%, rgba(85, 107, 60, 0.07) 0%, transparent 50%),
+      radial-gradient(circle at 40% 90%, rgba(85, 107, 60, 0.04) 0%, transparent 40%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.04  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .hand { font-family: "Caveat", cursive; }
+  .display { font-family: "Fraunces", Georgia, serif; }
+  .sketch-underline {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12'><path d='M2,8 Q40,2 80,7 T160,7 T198,5' stroke='%23B4541E' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 100% 0.5em;
+    padding-bottom: 0.1em;
+  }
+  .tape {
+    position: absolute;
+    width: 90px;
+    height: 22px;
+    background: rgba(230, 181, 71, 0.5);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transform: rotate(-4deg);
+  }
+  .rotate-subtle-r { transform: rotate(0.6deg); }
+  .btn-rust { background: #B4541E; color: #F3EBDB; }
+  .btn-rust:hover { background: #8C3E12; }
+  .btn-ghost {
+    border: 1.5px solid #433C30;
+    color: #1F1B15;
+    background: transparent;
+  }
+  .btn-ghost:hover { background: rgba(31,27,21,0.06); }
+</style>
+</head>
+<body class="font-sans text-ink antialiased">
+
+<!-- Preview banner -->
+<div class="w-full bg-ink text-paper text-center text-sm py-2 px-4">
+  <span class="hand text-lg text-yolk">hero preview —</span>
+  showing the trimmed copy + landscape dashboard mock. Not live yet.
+</div>
+
+<!-- ========= NAV ========= -->
+<header class="sticky top-0 z-30 backdrop-blur bg-paper/85 border-b border-ink/10">
+  <div class="max-w-5xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
+    <a href="#top" class="flex items-center gap-2.5 no-underline">
+      <svg width="36" height="36" viewBox="0 0 48 48" class="shrink-0">
+        <g fill="none" stroke="#1F1B15" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z" />
+          <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21" />
+          <path d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13" stroke="#B4541E" stroke-width="1.6"/>
+          <circle cx="38" cy="17" r="0.8" fill="#1F1B15" stroke="none"/>
+          <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E"/>
+          <path d="M18 24 Q24 26 28 30" />
+          <path d="M10 30 Q5 26 8 22" stroke-width="1.6"/>
+          <path d="M19 37 L18 41 M18 41 L16 41 M18 41 L20 41 M18 41 L18 43" />
+          <path d="M27 37 L28 41 M28 41 L26 41 M28 41 L30 41 M28 41 L28 43" />
+        </g>
+      </svg>
+      <span class="display text-[22px] font-bold text-ink tracking-tight">CoopKeeper</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-[15px] text-ink-soft">
+      <a href="#what" class="hover:text-ink">What it does</a>
+      <a href="#why" class="hover:text-ink">Why I built it</a>
+      <a href="#faq" class="hover:text-ink">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#" class="btn-ghost px-3 sm:px-4 py-2 rounded-md text-sm font-medium">Log in</a>
+      <a href="#" class="btn-rust px-3 sm:px-4 py-2 rounded-md text-sm font-semibold">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========= HERO ========= -->
+<section id="top" class="max-w-4xl mx-auto px-5 sm:px-6 pt-12 md:pt-20 pb-14 md:pb-16 relative overflow-hidden text-center">
+  <p class="hand text-xl text-rust mb-3">howdy —</p>
+  <h1 class="display text-[30px] sm:text-[38px] md:text-[46px] leading-[1.15] font-semibold text-ink tracking-tight max-w-3xl mx-auto">
+    Spend less time tracking your flock,<br/>
+    more time <span class="sketch-underline">enjoying it.</span>
+  </h1>
+
+  <!-- Dashboard sketch -->
+  <div class="mt-10 md:mt-14 relative max-w-2xl mx-auto">
+    <div class="relative rotate-subtle-r z-10">
+      <div class="tape left-1/2 -translate-x-1/2 -top-3"></div>
+      <div class="bg-paper-dark border border-ink/15 rounded-sm p-5 shadow-[2px_3px_0_rgba(31,27,21,0.08)]">
+          <!-- Landscape dashboard SVG (same as Hero.jsx DashboardSketch) -->
+          <svg viewBox="0 0 420 320" class="w-full">
+            <rect x="4" y="4" width="412" height="312" rx="8" fill="#F3EBDB" stroke="#1F1B15" stroke-width="1.4" />
+            <rect x="4" y="4" width="412" height="22" rx="8" fill="#E8DDC4" stroke="#1F1B15" stroke-width="1.4" />
+            <circle cx="16" cy="15" r="3" fill="#B4541E" />
+            <circle cx="26" cy="15" r="3" fill="#E6B547" />
+            <circle cx="36" cy="15" r="3" fill="#556B3C" />
+            <rect x="120" y="9" width="180" height="12" rx="6" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.8" opacity="0.7" />
+            <text x="210" y="18" font-family="Inter" font-size="7.5" fill="#7B715E" text-anchor="middle">app.coopkeeper.net</text>
+
+            <g transform="translate(16, 36)">
+              <g transform="translate(0, 2) scale(0.45)">
+                <g fill="none" stroke="#1F1B15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 32 Q8 22 16 18 Q22 15 28 17 Q33 18 36 22 Q40 28 36 34 Q30 39 20 37 Q13 36 10 32 Z" />
+                  <path d="M32 19 Q35 13 40 14 Q42 15 41 18 Q40 21 36 21" />
+                  <path d="M36 13 Q37 11 38 13 Q39 11 40 13 Q41 11 42 13" stroke="#B4541E" />
+                  <circle cx="38" cy="17" r="1.1" fill="#1F1B15" stroke="none" />
+                  <path d="M41 18 L43 18.5 L41 19.5 Z" fill="#B4541E" stroke="#B4541E" />
+                </g>
+              </g>
+              <text x="26" y="15" font-family="Fraunces" font-size="12" font-weight="700" fill="#1F1B15">CoopKeeper</text>
+              <rect x="328" y="4" width="60" height="14" rx="7" fill="#E8DDC4" stroke="#1F1B15" stroke-width="0.6" opacity="0.6" />
+              <text x="358" y="13" font-family="Inter" font-size="6.5" fill="#3E3830" text-anchor="middle">Signed in as Tay</text>
+            </g>
+
+            <g transform="translate(16, 64)">
+              <text x="0" y="10" font-family="Caveat" font-size="16" fill="#556B3C" font-weight="600">Morning, Tay —</text>
+              <text x="0" y="25" font-family="Caveat" font-size="11" fill="#7B715E">sun · apr 19</text>
+            </g>
+
+            <g transform="translate(16, 96)">
+              <g transform="translate(0, 0)">
+                <rect x="0" y="0" width="88" height="42" rx="5" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" opacity="0.95" />
+                <text x="8" y="14" font-family="Caveat" font-size="10" fill="#7B715E">Chickens</text>
+                <text x="8" y="33" font-family="Fraunces" font-size="16" font-weight="700" fill="#1F1B15">6</text>
+              </g>
+              <g transform="translate(96, 0)">
+                <rect x="0" y="0" width="88" height="42" rx="5" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" opacity="0.95" />
+                <text x="8" y="14" font-family="Caveat" font-size="10" fill="#7B715E">Eggs (30d)</text>
+                <text x="8" y="33" font-family="Fraunces" font-size="16" font-weight="700" fill="#1F1B15">187</text>
+              </g>
+              <g transform="translate(192, 0)">
+                <rect x="0" y="0" width="88" height="42" rx="5" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" opacity="0.95" />
+                <text x="8" y="14" font-family="Caveat" font-size="10" fill="#7B715E">$/dozen</text>
+                <text x="8" y="33" font-family="Fraunces" font-size="16" font-weight="700" fill="#1F1B15">$2.40</text>
+              </g>
+              <g transform="translate(288, 0)">
+                <rect x="0" y="0" width="88" height="42" rx="5" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" opacity="0.95" />
+                <text x="8" y="14" font-family="Caveat" font-size="10" fill="#7B715E">Last clean</text>
+                <text x="8" y="33" font-family="Fraunces" font-size="16" font-weight="700" fill="#1F1B15">3d</text>
+              </g>
+            </g>
+
+            <g transform="translate(16, 148)">
+              <rect x="0" y="0" width="250" height="156" rx="6" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" />
+              <text x="10" y="16" font-family="Fraunces" font-size="11" font-weight="600" fill="#1F1B15">Eggs over time</text>
+              <text x="10" y="28" font-family="Inter" font-size="7" fill="#7B715E">last 30 days</text>
+
+              <g stroke="#1F1B15" stroke-width="0.4" stroke-dasharray="2 3" opacity="0.25">
+                <line x1="20" y1="50" x2="240" y2="50" />
+                <line x1="20" y1="75" x2="240" y2="75" />
+                <line x1="20" y1="100" x2="240" y2="100" />
+                <line x1="20" y1="125" x2="240" y2="125" />
+              </g>
+
+              <path d="M 20 125 L 20 95 L 50 78 L 80 88 L 110 60 L 140 72 L 170 55 L 200 68 L 230 48 L 230 125 Z" fill="#556B3C" opacity="0.18" />
+              <path d="M 20 95 L 50 78 L 80 88 L 110 60 L 140 72 L 170 55 L 200 68 L 230 48" fill="none" stroke="#1F1B15" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+
+              <circle cx="20" cy="95" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="50" cy="78" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="80" cy="88" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="110" cy="60" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="140" cy="72" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="170" cy="55" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="200" cy="68" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+              <circle cx="230" cy="48" r="2.6" fill="#B4541E" stroke="#FAF4E6" stroke-width="0.8" />
+
+              <g font-family="Inter" font-size="6" fill="#7B715E">
+                <text x="20" y="140">Mar 20</text>
+                <text x="110" y="140">Apr 4</text>
+                <text x="210" y="140">Apr 19</text>
+              </g>
+            </g>
+
+            <g transform="translate(276, 148)">
+              <rect x="0" y="0" width="128" height="156" rx="6" fill="#FAF4E6" stroke="#1F1B15" stroke-width="0.8" />
+              <text x="10" y="16" font-family="Fraunces" font-size="11" font-weight="600" fill="#1F1B15">Egg records</text>
+
+              <g transform="translate(8, 28)">
+                <rect x="0" y="0" width="112" height="20" rx="3" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.5" opacity="0.7" />
+                <text x="6" y="13" font-family="Fraunces" font-size="8" fill="#1F1B15">Apr 19</text>
+                <text x="106" y="13" font-family="Inter" font-size="8" fill="#1F1B15" font-weight="600" text-anchor="end">7 eggs</text>
+              </g>
+              <g transform="translate(8, 52)">
+                <rect x="0" y="0" width="112" height="20" rx="3" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.5" opacity="0.7" />
+                <text x="6" y="13" font-family="Fraunces" font-size="8" fill="#1F1B15">Apr 18</text>
+                <text x="106" y="13" font-family="Inter" font-size="8" fill="#1F1B15" font-weight="600" text-anchor="end">8 eggs</text>
+              </g>
+              <g transform="translate(8, 76)">
+                <rect x="0" y="0" width="112" height="20" rx="3" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.5" opacity="0.7" />
+                <text x="6" y="13" font-family="Fraunces" font-size="8" fill="#1F1B15">Apr 17</text>
+                <text x="106" y="13" font-family="Inter" font-size="8" fill="#1F1B15" font-weight="600" text-anchor="end">6 eggs</text>
+              </g>
+              <g transform="translate(8, 100)">
+                <rect x="0" y="0" width="112" height="20" rx="3" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.5" opacity="0.7" />
+                <text x="6" y="13" font-family="Fraunces" font-size="8" fill="#1F1B15">Apr 16</text>
+                <text x="106" y="13" font-family="Inter" font-size="8" fill="#1F1B15" font-weight="600" text-anchor="end">7 eggs</text>
+              </g>
+              <g transform="translate(8, 124)">
+                <rect x="0" y="0" width="112" height="20" rx="3" fill="#F3EBDB" stroke="#1F1B15" stroke-width="0.5" opacity="0.7" />
+                <text x="6" y="13" font-family="Fraunces" font-size="8" fill="#1F1B15">Apr 15</text>
+                <text x="106" y="13" font-family="Inter" font-size="8" fill="#1F1B15" font-weight="600" text-anchor="end">5 eggs</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  <p class="mt-10 md:mt-12 text-[17px] md:text-[19px] text-ink-soft leading-relaxed max-w-xl mx-auto">
+    Keep track of eggs, expenses, feed, and your flock — all in one simple place.
+  </p>
+
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+    <a href="#" class="btn-rust px-7 py-3.5 rounded-md text-[16px] font-semibold shadow-[2px_3px_0_rgba(31,27,21,0.15)]">
+      Get Started
+    </a>
+    <a href="#" class="btn-ghost px-7 py-3.5 rounded-md text-[16px] font-semibold">
+      Log In
+    </a>
+  </div>
+  <p class="hand text-[17px] text-ink-muted mt-5">
+    No spreadsheets. No guesswork. Just better chicken keeping.
+  </p>
+</section>
+
+<!-- ========= WHY I BUILT IT ========= -->
+<section id="why" class="max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-24 border-t border-ink/10">
+  <p class="hand text-xl text-moss mb-3">the honest bit</p>
+  <h2 class="display text-[28px] sm:text-3xl md:text-4xl font-semibold text-ink leading-snug mb-6">
+    Spreadsheets don't last. Notebooks get rained on.
+  </h2>
+  <div class="space-y-5 text-[17px] md:text-[18px] leading-relaxed text-ink-soft">
+    <p>
+      Google Sheets get opened twice then forgotten. When I got my first
+      six hens in spring '24, I tried all three. By October I couldn't
+      tell you which hen was molting, when I last bought feed, or whether
+      I was losing money on eggs.
+    </p>
+    <p>
+      So I built what I actually needed. Open it, tap in today's eggs,
+      close it. It remembers your coop, keeps your feed and cleaning in
+      one place, and over time shows you what your flock is really
+      producing.
+    </p>
+    <p class="text-ink">— Tay, who is still bad at remembering cleaning days</p>
+  </div>
+</section>
+
+<!-- ========= FAQ (teaser) ========= -->
+<section id="faq" class="max-w-3xl mx-auto px-5 sm:px-6 py-16 md:py-24 border-t border-ink/10">
+  <p class="hand text-xl text-rust mb-2">before you ask</p>
+  <h2 class="display text-[28px] sm:text-3xl md:text-4xl font-semibold text-ink leading-[1.1] mb-8">
+    Questions real people have asked me.
+  </h2>
+  <div class="space-y-6">
+    <details class="border-b border-ink/10 pb-5 group" open>
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Is it actually free?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Yes. Right now the whole thing is free — I'm one person paying about
+        $7/month to host it. Somewhere down the road there may be paid features
+        for folks who want extras, but the basics — logging eggs, tracking feed
+        and costs, cleaning reminders — will stay free forever.
+      </p>
+    </details>
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Is there an app?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Not yet. It's a website — open it on any phone, tablet, or laptop.
+        Add it to your home screen and it acts like an app. Someday there
+        may be a proper native app, but for now this works just fine.
+      </p>
+    </details>
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Will you sell my data?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        No. No third-party trackers, no ad pixels, no email list sold to Tractor Supply.
+      </p>
+    </details>
+    <details class="border-b border-ink/10 pb-5 group">
+      <summary class="flex justify-between items-start cursor-pointer list-none gap-4">
+        <span class="display text-xl font-semibold text-ink">Do you take feature requests?</span>
+        <span class="display text-rust text-2xl leading-none group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="mt-3 text-[17px] text-ink-soft leading-relaxed">
+        Yes, enthusiastically. Email me at
+        <a href="mailto:hello@coopkeeper.net" class="text-moss-dark underline underline-offset-2"> hello@coopkeeper.net</a>
+        — I read every one. A lot of what ends up getting built (including the
+        "maybe someday" stuff up there — a native app, paid extras, whatever)
+        will get built because enough people wrote in and asked for it. So if
+        there's something you want, tell me. I won't build everything, but the
+        ones I hear three times tend to happen.
+      </p>
+    </details>
+  </div>
+</section>
+
+<div class="h-20"></div>
+
+</body>
+</html>

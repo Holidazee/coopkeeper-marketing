@@ -54,7 +54,7 @@ export default function Nav() {
             href={SIGNUP_URL}
             className="btn-rust px-3 sm:px-4 py-2 rounded-md text-sm font-semibold"
           >
-            Try it
+            Get Started
           </a>
         </div>
       </div>
